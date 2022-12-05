@@ -1,17 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import {
   AppStyles,
   HeaderStyles,
   FormStyles,
   ButtonStyles,
-} from './App.styles';
-import ListItems from './ListItems';
-import swal from 'sweetalert';
-import Footer from './Footer/Footer';
+} from "./App.styles";
+import ListItems from "./ListItems";
+import swal from "sweetalert";
+import Footer from "./Footer/Footer";
 
 const App = () => {
   const [items, setItems] = useState([]);
-  const [currentItem, setCurrentItem] = useState({ text: '', key: '' });
+  const [currentItem, setCurrentItem] = useState({ text: "", key: "" });
 
   // this is where persistance is done in local storage .....
   useEffect(() => {
@@ -19,12 +19,13 @@ const App = () => {
   }, []);
 
   const fetchTodos = async () => {
-      const data = await (await fetch("https://jsonplaceholder.typicode.com/todos"));
-      setItems(data.map(d => ({ ...d, text: d.title, key: d.id })));
-  }
+    const res = await fetch("https://jsonplaceholder.typicode.com/todos");
+    const data = await res.json();
+    setItems(data.map((d) => ({ ...d, text: d.title, key: d.id })));
+  };
 
   useEffect(() => {
-    localStorage.setItem('todoslist', JSON.stringify(items));
+    localStorage.setItem("todoslist", JSON.stringify(items));
   });
 
   const handleInput = (e) => {
@@ -36,12 +37,12 @@ const App = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (currentItem.text === '') {
-      swal('Oops!', 'Please enter some text!', 'error');
+    if (currentItem.text === "") {
+      swal("Oops!", "Please enter some text!", "error");
     } else {
       const checkItem = currentItem;
       setItems([...items, checkItem]);
-      setCurrentItem({ text: '', key: '' });
+      setCurrentItem({ text: "", key: "" });
     }
   };
 
@@ -54,14 +55,14 @@ const App = () => {
     <>
       <AppStyles>
         <HeaderStyles>
-          <form className='to-do-form' onSubmit={handleSubmit}>
+          <form className="to-do-form" onSubmit={handleSubmit}>
             <FormStyles
-              type='text'
-              placeholder='Add Tasks...'
+              type="text"
+              placeholder="Add Tasks..."
               value={currentItem.text}
               onChange={handleInput}
             />
-            <ButtonStyles type='submit'>Add</ButtonStyles>
+            <ButtonStyles type="submit">Add</ButtonStyles>
           </form>
         </HeaderStyles>
         <ListItems items={items} deleteItems={deleteItems} />
