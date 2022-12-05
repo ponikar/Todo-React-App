@@ -15,11 +15,13 @@ const App = () => {
 
   // this is where persistance is done in local storage .....
   useEffect(() => {
-    const data = localStorage.getItem('todoslist');
-    if (data) {
-      setItems(JSON.parse(data));
-    }
+    fetchTodos();
   }, []);
+
+  const fetchTodos = async () => {
+      const data = await (await fetch("https://jsonplaceholder.typicode.com/todos"));
+      setItems(data.map(d => ({ ...d, text: d.title, key: d.id })));
+  }
 
   useEffect(() => {
     localStorage.setItem('todoslist', JSON.stringify(items));
